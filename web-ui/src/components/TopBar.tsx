@@ -1,25 +1,89 @@
-import { Link } from 'react-router-dom';
+import { useLocation, useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
+
+import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
+import { useUser } from "@/contexts/UserContext";
+
+const navItems = [
+    { label: "Home", path: "/" },
+    { label: "Community", path: "/community" },
+    { label: "Creation Management", path: "/creation-management" },
+    { label: "User Center", path: "/usercenter" },
+];
 
 const TopBar = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { user, isLoggedIn, logout } = useUser();
+
     return (
-        <div className="flex items-center justify-between px-4 py-2 bg-white shadow-md">
+        <div className="flex items-center justify-between px-4 py-2 bg-black/20 backdrop-blur-sm border-b border-white/10">
             <div className="flex items-center">
                 <img src="/logo_collapse.png" alt="Logo" className="h-8" />
             </div>
-            <nav className="flex items-center space-x-6">
-                <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors">
-                    Home
-                </Link>
-                <Link to="/community" className="text-gray-700 hover:text-blue-600 transition-colors">
-                    Community
-                </Link>
-                <Link to="/creation-management" className="text-gray-700 hover:text-blue-600 transition-colors">
-                    Creation Management
-                </Link>
-                <Link to="/usercenter" className="text-gray-700 hover:text-blue-600 transition-colors">
-                    User Center
-                </Link>
+            <nav className="flex items-center space-x-4">
+                {navItems.map((item) => {
+                    const isActive = item.path === "/"
+                        ? location.pathname === "/"
+                        : location.pathname.startsWith(item.path);
+
+                    return (
+                        <Button
+                            key={item.path}
+                            variant="ghost"
+                            onClick={() => !isActive && navigate(item.path)}
+                            className={cn(
+                                "text-white/90 hover:text-white hover:bg-white/10",
+                                isActive && "bg-white/15 text-white hover:bg-white/15"
+                            )}
+                            disabled={isActive}
+                            aria-current={isActive ? "page" : undefined}
+                        >
+                            {item.label}
+                        </Button>
+                    );
+                })}
             </nav>
+
+            {/* Auth Section */}
+            <div className="flex items-center gap-3">
+                {isLoggedIn && user ? (
+                    <div className="flex items-center gap-3">
+                        <img
+                            src={user.avatar}
+                            alt={user.name}
+                            className="h-8 w-8 rounded-full border border-white/20"
+                        />
+                        <span className="text-sm text-white/80 hidden sm:inline">{user.name}</span>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={logout}
+                            className="text-white/70 hover:text-white hover:bg-white/10"
+                            title="Logout"
+                        >
+                            <LogOut className="h-4 w-4" />
+                        </Button>
+                    </div>
+                ) : (
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant="ghost"
+                            onClick={() => navigate("/login")}
+                            className="text-white/90 hover:text-white hover:bg-white/10"
+                        >
+                            Login
+                        </Button>
+                        <Button
+                            onClick={() => navigate("/signup")}
+                            className="bg-gradient-to-r from-purple-600 to-emerald-600 text-white hover:from-purple-700 hover:to-emerald-700"
+                        >
+                            Sign Up
+                        </Button>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
