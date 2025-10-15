@@ -151,7 +151,10 @@ const CommunityPost = () => {
 
                                 {/* Tweak Button */}
                                 {!isLoading && (
-                                    <Button className="w-full gap-2 bg-gradient-to-r from-purple-600 to-emerald-600 text-white hover:from-purple-700 hover:to-emerald-700 text-xs h-9">
+                                    <Button
+                                        onClick={() => navigate("/workbench/demo-project/footage")}
+                                        className="w-full gap-2 bg-gradient-to-r from-purple-600 to-emerald-600 text-white hover:from-purple-700 hover:to-emerald-700 text-xs h-9"
+                                    >
                                         <Zap className="h-3 w-3" />
                                         Tweak
                                     </Button>

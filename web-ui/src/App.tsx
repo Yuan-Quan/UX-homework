@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import TopBar from './components/TopBar';
 import { ThemeProvider } from "./components/providers/ThemeProvider";
 import { UserProvider } from "./contexts/UserContext";
@@ -7,10 +7,14 @@ import Community from "./pages/Community";
 import CommunityPost from "./pages/CommunityPost";
 import CreationManagement from "./pages/CreationManagement";
 import UserCenter from "./pages/UserCenter";
+import ProjectWorkbench from "./pages/ProjectWorkbench";
 
 
 
 export default function App() {
+  const location = useLocation();
+  const isWorkbench = location.pathname.startsWith("/workbench");
+
   return (
     <ThemeProvider defaultTheme="dark">
       <UserProvider>
@@ -22,8 +26,8 @@ export default function App() {
 
           {/* Content */}
           <div className="relative z-10">
-            <TopBar />
-            <div className="p-4">
+            {!isWorkbench && <TopBar />}
+            {!isWorkbench && <div className="p-4">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/community" element={<Community />} />
@@ -31,7 +35,13 @@ export default function App() {
                 <Route path="/creation-management" element={<CreationManagement />} />
                 <Route path="/usercenter" element={<UserCenter />} />
               </Routes>
-            </div>
+            </div>}
+            {isWorkbench && (
+              <Routes>
+                <Route path="/workbench/:projectName" element={<ProjectWorkbench />} />
+                <Route path="/workbench/:projectName/:tab" element={<ProjectWorkbench />} />
+              </Routes>
+            )}
           </div>
         </div>
       </UserProvider>

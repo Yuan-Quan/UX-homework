@@ -2,6 +2,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { PlusCircle, Search } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const projectData = [
     {
@@ -31,7 +32,7 @@ const projectData = [
     }
 ];
 
-const ProjectCard = ({ project }: { project: (typeof projectData)[0] }) => {
+const ProjectCard = ({ project, onProjectClick }: { project: (typeof projectData)[0], onProjectClick?: () => void }) => {
     const [isHovered, setIsHovered] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -46,6 +47,12 @@ const ProjectCard = ({ project }: { project: (typeof projectData)[0] }) => {
         }
     }, [isHovered]);
 
+    const handleClick = () => {
+        if (project.type !== "new" && onProjectClick) {
+            onProjectClick();
+        }
+    };
+
     return (
         <div
             className={`p-3 rounded-lg ${project.type === "new"
@@ -54,6 +61,7 @@ const ProjectCard = ({ project }: { project: (typeof projectData)[0] }) => {
                 } backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            onClick={handleClick}
         >
             <div className="flex gap-3">
                 {project.type === "new" ? (
@@ -93,6 +101,12 @@ const ProjectCard = ({ project }: { project: (typeof projectData)[0] }) => {
 };
 
 const ProjectPanel = () => {
+    const navigate = useNavigate();
+
+    const handleProjectClick = () => {
+        navigate(`/workbench/demo-project`);
+    };
+
     return (
         <div className="flex flex-col px-4 lg:px-6">
             <div className="flex-none">
@@ -117,7 +131,7 @@ const ProjectPanel = () => {
                 <ScrollArea className="h-full pr-4">
                     <div className="space-y-4">
                         {projectData.map((project, index) => (
-                            <ProjectCard key={index} project={project} />
+                            <ProjectCard key={index} project={project} onProjectClick={handleProjectClick} />
                         ))}
                     </div>
                     <ScrollBar orientation="vertical" />
