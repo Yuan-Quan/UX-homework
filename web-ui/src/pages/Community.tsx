@@ -34,10 +34,10 @@ const Community = () => {
                 <div className="flex flex-col justify-between gap-3 lg:flex-row lg:items-end">
                     <div className="space-y-1">
                         <h1 className="text-2xl font-semibold tracking-tight text-white">
-                            Community
+                            社区
                         </h1>
                         <p className="max-w-2xl text-xs text-white/60">
-                            Discover the latest community artworks and creators
+                            发现最新的社区作品和创作者
                         </p>
                     </div>
 
@@ -45,7 +45,7 @@ const Community = () => {
                         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
                         <Input
                             type="search"
-                            placeholder="Search artworks, creators..."
+                            placeholder="搜索作品、创作者..."
                             className="border-white/15 bg-white/10 pl-9 text-sm text-white placeholder:text-white/50 focus-visible:ring-white/30 hover:bg-white/15"
                         />
                     </div>
@@ -63,10 +63,10 @@ const Community = () => {
                         <div className="flex flex-wrap items-center justify-between gap-4">
                             <div className="space-y-1">
                                 <p className="text-xs font-medium uppercase tracking-[0.3em] text-muted-foreground/70 text-white">
-                                    Community Spotlight
+                                    社区聚焦
                                 </p>
                                 <h2 className="text-2xl font-semibold text-white">
-                                    Today’s Featured Gallery
+                                    今日精选作品
                                 </h2>
                             </div>
                             <div className="flex items-center gap-3">

@@ -17,12 +17,12 @@ interface Tab {
 }
 
 const tabs: Tab[] = [
-    { id: "ingredients", label: "Ingredients" },
-    { id: "footage", label: "Footage" },
-    { id: "arrange", label: "Arrange" },
-    { id: "stylization", label: "Stylization" },
-    { id: "audio", label: "Audio" },
-    { id: "deliver", label: "Deliver" },
+    { id: "ingredients", label: "素材" },
+    { id: "footage", label: "镜头" },
+    { id: "arrange", label: "排列" },
+    { id: "stylization", label: "风格化" },
+    { id: "audio", label: "音频" },
+    { id: "deliver", label: "输出" },
 ];
 
 const renderContent = (tab: TabType) => {
@@ -68,7 +68,7 @@ const ProjectWorkbench = () => {
                         className="mb-4 text-white/70 hover:text-white hover:bg-white/10 w-full justify-start"
                     >
                         <ArrowLeft className="h-4 w-4 mr-2" />
-                        Back
+                        返回
                     </Button>
                     <h3 className="text-lg font-semibold text-white truncate">
                         {projectName || "Project"}

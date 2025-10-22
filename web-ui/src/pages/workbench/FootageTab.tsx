@@ -154,7 +154,7 @@ export const FootageTab = () => {
 
     return (
         <div className="p-6 h-full flex flex-col">
-            <h2 className="text-2xl font-bold text-white mb-6">Generate Footage</h2>
+            <h2 className="text-2xl font-bold text-white mb-6">生成镜头</h2>
 
             <div className="flex gap-6 flex-1 overflow-hidden">
                 {/* Left Panel - Controls */}
@@ -165,7 +165,7 @@ export const FootageTab = () => {
                             onClick={() => setExpandIngredients(!expandIngredients)}
                             className="w-full flex items-center justify-between p-4 hover:bg-black/30 transition-colors"
                         >
-                            <h3 className="text-white font-semibold">Ingredients ({ingredients.length})</h3>
+                            <h3 className="text-white font-semibold">素材 ({ingredients.length})</h3>
                             <ChevronDown
                                 className={`h-5 w-5 text-white/70 transition-transform ${expandIngredients ? "rotate-180" : ""}`}
                             />
@@ -179,7 +179,7 @@ export const FootageTab = () => {
                                         className="w-full bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold py-2"
                                     >
                                         <Plus className="h-4 w-4 mr-2" />
-                                        Select from Library
+                                        从库中选择
                                     </Button>
 
                                     {/* Upload ingredient button */}
@@ -191,7 +191,7 @@ export const FootageTab = () => {
                                             className="hidden"
                                         />
                                         <div className="w-full h-10 bg-black/40 border-2 border-dashed border-white/30 rounded-lg flex items-center justify-center hover:border-white/50 transition-colors">
-                                            <p className="text-xs text-white/70">Or upload image</p>
+                                            <p className="text-xs text-white/70">或上传图片</p>
                                         </div>
                                     </label>
 

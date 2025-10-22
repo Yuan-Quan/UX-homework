@@ -8,10 +8,10 @@ import { useUser } from "@/contexts/UserContext";
 import LoginCard from "./LoginCard";
 
 const navItems = [
-    { label: "Home", path: "/" },
-    { label: "Community", path: "/community" },
-    { label: "Creation Management", path: "/creation-management" },
-    { label: "User Center", path: "/usercenter" },
+    { label: "首页", path: "/" },
+    { label: "社区", path: "/community" },
+    { label: "创作管理", path: "/creation-management" },
+    { label: "用户中心", path: "/usercenter" },
 ];
 
 const TopBar = () => {
@@ -91,7 +91,7 @@ const TopBar = () => {
                             onClick={() => setShowLoginCard(true)}
                             className="bg-gradient-to-r from-purple-600 to-emerald-600 text-white hover:from-purple-700 hover:to-emerald-700"
                         >
-                            Login / Sign Up
+                            登录 / 注册
                         </Button>
                     )}
                 </div>

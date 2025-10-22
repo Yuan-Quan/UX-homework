@@ -25,10 +25,10 @@ const Home = () => {
                 <div className="lg:w-[600px] lg:h-screen lg:overflow-y-auto lg:flex-shrink-0 no-scrollbar">
                     <div className="px-4 py-6 lg:py-8">
                         <h1 className="text-4xl font-bold text-white mb-3 text-center lg:text-left">
-                            Welcome to 绘想 AIGC Platform
+                            欢迎来到绘想 AIGC 平台
                         </h1>
                         <p className="text-base text-white/80 max-w-2xl mx-auto lg:mx-0 mb-4 text-center lg:text-left">
-                            Your creative AI journey starts here. Explore, create, and share amazing AI-generated content.
+                            开启您的创意AI之旅。探索、创建并分享令人惊艳的AI生成内容。
                         </p>
                     </div>
                     <ProjectPanel />

@@ -94,14 +94,14 @@ const VideoTile = ({ src, index, className = "", onNavigate }: VideoTileProps) =
                         className="bg-white/20 hover:bg-white/30 text-white border border-white/40"
                         onClick={() => onNavigate?.("/community/1")}
                     >
-                        Use This Template
+                        使用此模板
                     </Button>
                     <Button
                         variant="secondary"
                         className="bg-purple-500/30 hover:bg-purple-500/50 text-white border border-purple-400/40"
                         onClick={() => onNavigate?.("/workbench/demo-project/footage")}
                     >
-                        Tweak
+                        调整
                     </Button>
                 </div>
             )}
@@ -212,7 +212,7 @@ const VideoWall = () => {
                     className="bg-gradient-to-r from-purple-500/80 to-blue-500/80 hover:from-purple-500/90 hover:to-blue-500/90 text-white border-white/30 shadow-lg backdrop-blur-sm transition-all duration-300 font-semibold px-8 relative z-20"
                     onClick={() => navigate("/community")}
                 >
-                    Explore Community
+                    探索社区
                 </Button>
             </div>
         </div>

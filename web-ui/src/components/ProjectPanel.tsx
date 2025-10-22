@@ -6,28 +6,28 @@ import { useNavigate } from "react-router-dom";
 
 const projectData = [
     {
-        title: "New Project",
-        description: "Start Fresh",
+        title: "新项目",
+        description: "重新开始",
         type: "new"
     },
     {
         title: "Demo_Project Icecream Castel",
-        description: "An Icecream Castle above the clouds",
+        description: "云上的冰淇淋城堡",
         date: "2025-10-16"
     },
     {
-        title: "2025-10-15 Untitled",
-        description: "Project description",
+        title: "2025-10-15 未命名",
+        description: "项目描述",
         date: "2025-10-15"
     },
     {
-        title: "2025-10-12 test project",
-        description: "to test new long video generation function",
+        title: "2025-10-12 测试项目",
+        description: "测试新的长视频生成功能",
         date: "2025-10-12"
     },
     {
-        title: "2025-10-01 Untitled",
-        description: "Project description",
+        title: "2025-10-01 未命名",
+        description: "项目描述",
         date: "2025-10-01"
     }
 ];
@@ -112,14 +112,14 @@ const ProjectPanel = () => {
             <div className="flex-none">
                 <div className="sticky top-0 bg-background/80 backdrop-blur-sm pb-2">
                     <h2 className="text-lg font-semibold text-white mb-3 text-center lg:text-left">
-                        My Projects
+                        我的项目
                     </h2>
 
                     {/* Search Bar */}
                     <div className="relative mb-3">
                         <Search className="absolute left-3 top-2 h-4 w-4 text-white/50" />
                         <Input
-                            placeholder="Find a project..."
+                            placeholder="搜索项目..."
                             className="pl-9 bg-white/5 border-white/10 text-white placeholder:text-white/50 h-8 text-sm"
                         />
                     </div>
