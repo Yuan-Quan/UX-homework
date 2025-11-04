@@ -108,7 +108,7 @@ const ProjectPanel = () => {
     };
 
     return (
-        <div className="flex flex-col px-4 lg:px-6">
+        <div className="w-full flex flex-col px-4 lg:px-6">
             <div className="flex-none">
                 <div className="sticky top-0 bg-background/80 backdrop-blur-sm pb-2">
                     <h2 className="text-lg font-semibold text-white mb-3 text-center lg:text-left">

@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react"
 import { Search, ChevronLeft, ChevronRight } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -47,7 +48,7 @@ interface VideoCard {
     src: string;
 }
 
-const VideoCard = ({ src }: { src: string }) => {
+const VideoCard = ({ src, onViewClick }: { src: string; onViewClick?: () => void }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isHovered, setIsHovered] = useState(false);
 
@@ -79,6 +80,7 @@ const VideoCard = ({ src }: { src: string }) => {
             {isHovered && (
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center transition-opacity">
                     <Button
+                        onClick={onViewClick}
                         className="bg-white/20 hover:bg-white/30 text-white border border-white/40"
                         size="sm"
                     >
@@ -91,6 +93,7 @@ const VideoCard = ({ src }: { src: string }) => {
 };
 
 const SectionCarousel = ({ section }: { section: Section }) => {
+    const navigate = useNavigate();
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const [cards, setCards] = useState<VideoCard[]>([]);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -164,7 +167,11 @@ const SectionCarousel = ({ section }: { section: Section }) => {
                     className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar px-4"
                 >
                     {cards.map((card) => (
-                        <VideoCard key={card.id} src={card.src} />
+                        <VideoCard
+                            key={card.id}
+                            src={card.src}
+                            onViewClick={() => navigate("/community/1")}
+                        />
                     ))}
                 </div>
             </div>

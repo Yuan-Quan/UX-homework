@@ -4,63 +4,82 @@ import { Button } from './ui/button';
 import { VideoWallSkeletonLoader } from './VideoWallSkeletonLoader';
 
 const videos = [
-    'anime_girl_sunset.1280_720.mp4',
-    'blue_skirt_neo.704_1280.mp4',
-    'cat_anime.720_720.mp4',
-    'cat_squish.1094_720.mp4',
-    'cyber_city.704_1280.mp4',
-    'dream_whale.720_1094.mp4',
-    'electric_tiger.720_1280.mp4',
-    'emo_girl.1280_720.mp4',
-    'flight.1280_720.mp4',
-    'icecream_castel.720_720.mp4',
-    'majon.1280_720.mp4',
-    'mountain_cart.720_720.mp4',
-    'pirimad.1280_704.mp4',
-    'snow_mountain.1280_704.mp4',
-    'surfing.704_1280.mp4',
-    'trans_beach.1280_720.mp4',
-    'water_dog.720_720.mp4',
-    'water_flower.704_1280.mp4'
+    { src: 'anime_girl_sunset.1280_720.mp4', width: 1280, height: 720 },
+    { src: 'blue_skirt_neo.704_1280.mp4', width: 704, height: 1280 },
+    { src: 'cat_anime.720_720.mp4', width: 720, height: 720 },
+    { src: 'cat_squish.1094_720.mp4', width: 1094, height: 720 },
+    { src: 'cyber_city.704_1280.mp4', width: 704, height: 1280 },
+    { src: 'dream_whale.720_1094.mp4', width: 720, height: 1094 },
+    { src: 'electric_tiger.720_1280.mp4', width: 720, height: 1280 },
+    { src: 'emo_girl.1280_720.mp4', width: 1280, height: 720 },
+    { src: 'flight.1280_720.mp4', width: 1280, height: 720 },
+    { src: 'icecream_castel.720_720.mp4', width: 720, height: 720 },
+    { src: 'majon.1280_720.mp4', width: 1280, height: 720 },
+    { src: 'mountain_cart.720_720.mp4', width: 720, height: 720 },
+    { src: 'pirimad.1280_704.mp4', width: 1280, height: 704 },
+    { src: 'snow_mountain.1280_704.mp4', width: 1280, height: 704 },
+    { src: 'surfing.704_1280.mp4', width: 704, height: 1280 },
+    { src: 'trans_beach.1280_720.mp4', width: 1280, height: 720 },
+    { src: 'water_dog.720_720.mp4', width: 720, height: 720 },
+    { src: 'water_flower.704_1280.mp4', width: 704, height: 1280 },
+    { src: 'pengun_960_960.mp4', width: 960, height: 960 },
+    { src: 'singing_960_960.mp4', width: 960, height: 960 },
+    { src: 'CatGirl_720_1280.mp4', width: 720, height: 1280 }
 ];
 
 interface VideoTileProps {
-    src: string;
+    video: { src: string; width: number; height: number };
     index: number;
     className?: string;
     onNavigate?: (path: string) => void;
 }
 
-const VideoTile = ({ src, index, className = "", onNavigate }: VideoTileProps) => {
+const VideoTile = ({ video, index, className = "", onNavigate }: VideoTileProps) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isHovered, setIsHovered] = useState(false);
 
-    // Get resolution from filename
-    const resolution = src.split('.')[1];
-    const [width, height] = resolution.split('_').map(Number);
+    const { src, width, height } = video;
 
-    // Create varied pattern - break up repetition every 8 items with different layouts
-    const positionInPattern = index % 12;
+    // Pattern that repeats every 15 tiles (5 rows) - ensures complete 3-column grid
+    const positionInPattern = index % 15;
     let sizeClass = '';
 
-    // More varied sizing pattern to break up repetition
+    // Row 1: Wide(2) + Regular(1) = 3 columns
     if (positionInPattern === 0) {
-        sizeClass = 'col-span-2 row-span-2 w-full h-[243px]'; // Large square
-    } else if (positionInPattern === 1 || positionInPattern === 2) {
+        sizeClass = 'col-span-2 w-full h-[120px]'; // Wide
+    } else if (positionInPattern === 1) {
+        sizeClass = 'w-full h-[120px]'; // Regular
+    }
+    // Row 2: Regular + Tall(2 rows) + Regular = 3 columns
+    else if (positionInPattern === 2) {
         sizeClass = 'w-full h-[120px]'; // Regular
     } else if (positionInPattern === 3) {
-        sizeClass = 'col-span-2 w-full h-[120px]'; // Wide
+        sizeClass = 'row-span-2 w-full h-[243px]'; // Tall
     } else if (positionInPattern === 4) {
-        sizeClass = 'row-span-2 w-full h-[243px]'; // Tall
-    } else if (positionInPattern === 5 || positionInPattern === 6) {
         sizeClass = 'w-full h-[120px]'; // Regular
-    } else if (positionInPattern === 7) {
-        sizeClass = 'col-span-2 w-full h-[120px]'; // Wide
-    } else if (positionInPattern === 8) {
+    }
+    // Row 3: Regular + (continuing tall) + Regular = 3 columns
+    else if (positionInPattern === 5) {
         sizeClass = 'w-full h-[120px]'; // Regular
-    } else if (positionInPattern === 9) {
-        sizeClass = 'row-span-2 w-full h-[243px]'; // Tall
-    } else if (positionInPattern === 10) {
+    } else if (positionInPattern === 6) {
+        sizeClass = 'w-full h-[120px]'; // Regular
+    }
+    // Row 4: Regular + Regular + Regular = 3 columns
+    else if (positionInPattern === 7 || positionInPattern === 8 || positionInPattern === 9) {
+        sizeClass = 'w-full h-[120px]'; // Regular
+    }
+    // Row 5: Large(2x2) + Regular = 3 columns for this row
+    else if (positionInPattern === 10) {
+        sizeClass = 'col-span-2 row-span-2 w-full h-[243px]'; // Large
+    } else if (positionInPattern === 11) {
+        sizeClass = 'w-full h-[120px]'; // Regular
+    }
+    // Row 6: (continuing large) + Regular
+    else if (positionInPattern === 12) {
+        sizeClass = 'w-full h-[120px]'; // Regular
+    }
+    // Row 7: Wide + Regular = 3 columns
+    else if (positionInPattern === 13) {
         sizeClass = 'col-span-2 w-full h-[120px]'; // Wide
     } else {
         sizeClass = 'w-full h-[120px]'; // Regular
@@ -94,14 +113,14 @@ const VideoTile = ({ src, index, className = "", onNavigate }: VideoTileProps) =
                         className="bg-white/20 hover:bg-white/30 text-white border border-white/40"
                         onClick={() => onNavigate?.("/community/1")}
                     >
-                        使用此模板
+                        查看详情
                     </Button>
                     <Button
                         variant="secondary"
                         className="bg-purple-500/30 hover:bg-purple-500/50 text-white border border-purple-400/40"
                         onClick={() => onNavigate?.("/workbench/demo-project/footage")}
                     >
-                        调整
+                        一键同款
                     </Button>
                 </div>
             )}
@@ -151,8 +170,8 @@ const VideoWall = () => {
                 const deltaTime = (timestamp - lastTimeRef.current) / 1000; // Convert to seconds
                 lastTimeRef.current = timestamp;
 
-                // Calculate scroll increment: 50 pixels per second
-                const scrollIncrement = scrollSpeedRef.current * deltaTime;
+                // Calculate scroll increment: 20 pixels per second
+                const scrollIncrement = scrollSpeedRef.current * deltaTime * 0.4;
                 container.scrollTop += scrollIncrement;
 
                 // Get the scrollable height
@@ -188,7 +207,7 @@ const VideoWall = () => {
     }
 
     return (
-        <div className="relative w-full rounded-b-2xl overflow-hidden">
+        <div className="relative w-full max-w-[700px] mx-auto rounded-b-2xl overflow-hidden">
             {/* Top fade */}
             <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-background to-transparent z-10" />
 
@@ -198,7 +217,7 @@ const VideoWall = () => {
                 className="h-[calc(100vh-100px)] overflow-y-scroll grid grid-cols-3 auto-rows-[120px] gap-3 px-6 no-scrollbar"
             >
                 {allVideos.map((video, index) => (
-                    <VideoTile key={`${video}-${index}`} src={video} index={index} onNavigate={navigate} />
+                    <VideoTile key={`${video.src}-${index}`} video={video} index={index} onNavigate={navigate} />
                 ))}
             </div>
 

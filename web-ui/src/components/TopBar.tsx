@@ -36,12 +36,11 @@ const TopBar = () => {
                             <Button
                                 key={item.path}
                                 variant="ghost"
-                                onClick={() => !isActive && navigate(item.path)}
+                                onClick={() => navigate(item.path)}
                                 className={cn(
-                                    "text-white/90 hover:text-white hover:bg-white/10",
-                                    isActive && "bg-white/15 text-white hover:bg-white/15"
+                                    "text-white/60 hover:text-white/90 rounded-none border-b-2 border-transparent transition-all",
+                                    isActive && "text-white border-white/80"
                                 )}
-                                disabled={isActive}
                                 aria-current={isActive ? "page" : undefined}
                             >
                                 {item.label}

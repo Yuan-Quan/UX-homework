@@ -9,10 +9,11 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Trash2, Check, ChevronDown, Plus, X } from "lucide-react";
+import { useIngredientLibrary } from "@/contexts/IngredientLibraryContext";
 
 type IngredientType = "frame" | "color" | "subject" | "background" | "texture" | "accent";
 
-interface Ingredient {
+interface FootageIngredient {
     id: string;
     image: string;
     type: IngredientType;
@@ -20,9 +21,11 @@ interface Ingredient {
 }
 
 export const FootageTab = () => {
+    const { libraryIngredients } = useIngredientLibrary();
     const [prompt, setPrompt] = useState("");
     const [model, setModel] = useState("AnimateDiff-v2");
     const [duration, setDuration] = useState("4");
+    const [aspectRatio, setAspectRatio] = useState("16:9");
     const [candidates, setCandidates] = useState("2");
     const [generatedVideos, setGeneratedVideos] = useState<Array<{ id: string; url: string; thumbnail: string }>>([]);
     const [currentPreview, setCurrentPreview] = useState<string | null>(null);
@@ -31,33 +34,17 @@ export const FootageTab = () => {
     const [selectedCandidate, setSelectedCandidate] = useState<string | null>(null);
     const [videoHistory, setVideoHistory] = useState<Array<{ id: string; url: string; thumbnail: string }>>([]);
     const [expandModelSettings, setExpandModelSettings] = useState(false);
-    const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+    const [ingredients, setIngredients] = useState<FootageIngredient[]>([]);
     const [expandIngredients, setExpandIngredients] = useState(true);
     const [motionVideo, setMotionVideo] = useState<string | null>(null);
     const [motionPrompt, setMotionPrompt] = useState("");
     const [expandMotionControl, setExpandMotionControl] = useState(false);
     const [showIngredientsDialog, setShowIngredientsDialog] = useState(false);
 
-    // Placeholder ingredient images (placeholder colors and patterns)
-    const placeholderIngredients = [
-        "/community_placeholder.png",
-        "/community_placeholder.png",
-        "/community_placeholder.png",
-        "/community_placeholder.png",
-        "/community_placeholder.png",
-        "/community_placeholder.png",
-        "/community_placeholder.png",
-        "/community_placeholder.png",
-    ];
-
-    // Simulated videos to pick from
-    const mockVideos = [
-        "/CommunityVideo/anime_girl_sunset.1280_720.mp4",
-        "/CommunityVideo/blue_skirt_neo.704_1280.mp4",
-        "/CommunityVideo/cyber_city.704_1280.mp4",
-        "/CommunityVideo/electric_tiger.720_1280.mp4",
-        "/CommunityVideo/emo_girl.1280_720.mp4",
-        "/CommunityVideo/flight.1280_720.mp4",
+    // Hardcoded candidate videos from FootageGenerationCadidates folder
+    const candidateVideos = [
+        "/FootageGenerationCadidates/Prediction 1.mp4",
+        "/FootageGenerationCadidates/Prediction 2.mp4"
     ];
 
     const handleGenerate = () => {
@@ -81,23 +68,17 @@ export const FootageTab = () => {
             clearInterval(progressInterval);
             setProgress(100);
 
-            // Create candidate videos
-            const numCandidates = parseInt(candidates) || 2;
-            const candidates_arr: Array<{ id: string; url: string; thumbnail: string }> = [];
-
-            for (let i = 0; i < numCandidates; i++) {
-                const randomVideo = mockVideos[Math.floor(Math.random() * mockVideos.length)];
-                candidates_arr.push({
-                    id: `${Date.now()}-${i}`,
-                    url: randomVideo,
-                    thumbnail: "/community_placeholder.png",
-                });
-            }
+            // Use hardcoded candidate videos - use the video itself as thumbnail
+            const candidates_arr: Array<{ id: string; url: string; thumbnail: string }> = candidateVideos.map((url, i) => ({
+                id: `${Date.now()}-${i}`,
+                url: url,
+                thumbnail: url, // Use the video URL as thumbnail so video element can display it
+            }));
 
             setGeneratedVideos(candidates_arr);
             setCurrentPreview(candidates_arr[0]?.url || null);
             setSelectedCandidate(candidates_arr[0]?.id || null);
-            setVideoHistory((prev) => [...candidates_arr, ...prev]);
+            // Don't automatically add to history - wait for user to commit
             setIsGenerating(false);
             setProgress(0);
         }, 3000);
@@ -106,6 +87,21 @@ export const FootageTab = () => {
     const handleSelectCandidate = (id: string, url: string) => {
         setSelectedCandidate(id);
         setCurrentPreview(url);
+    };
+
+    const handleCommitPrediction = () => {
+        // Hardcoded: Always add Prediction 1 to the footage library
+        const prediction1 = {
+            id: `footage-${Date.now()}`,
+            url: "/Footages/Prediction 1.mp4",
+            thumbnail: "/Footages/Prediction 1.mp4"
+        };
+
+        setVideoHistory((prev) => [prediction1, ...prev]);
+
+        // Clear generated videos after committing
+        setGeneratedVideos([]);
+        setSelectedCandidate(null);
     };
 
     const handleDelete = (id: string) => {
@@ -118,7 +114,7 @@ export const FootageTab = () => {
     };
 
     const handleAddIngredient = (image: string, type: IngredientType = "subject") => {
-        const newIngredient: Ingredient = {
+        const newIngredient: FootageIngredient = {
             id: Date.now().toString(),
             image,
             type,
@@ -290,7 +286,7 @@ export const FootageTab = () => {
                             onClick={() => setExpandMotionControl(!expandMotionControl)}
                             className="w-full flex items-center justify-between p-4 hover:bg-black/30 transition-colors"
                         >
-                            <h3 className="text-white font-semibold">Motion Control</h3>
+                            <h3 className="text-white font-semibold">运动控制</h3>
                             <ChevronDown
                                 className={`h-5 w-5 text-white/70 transition-transform ${expandMotionControl ? "rotate-180" : ""}`}
                             />
@@ -300,7 +296,7 @@ export const FootageTab = () => {
                                 <div className="space-y-3">
                                     {/* Video Upload */}
                                     <div>
-                                        <label className="text-sm text-white/70 block mb-2">Reference Video</label>
+                                        <label className="text-sm text-white/70 block mb-2">参考视频</label>
                                         <label className="block relative cursor-pointer">
                                             <input
                                                 type="file"
@@ -319,9 +315,9 @@ export const FootageTab = () => {
                                             />
                                             <div className="w-full h-20 bg-black/40 border-2 border-dashed border-white/30 rounded-lg flex items-center justify-center hover:border-white/50 transition-colors cursor-pointer">
                                                 {motionVideo ? (
-                                                    <span className="text-xs text-white/70">✓ Video selected</span>
+                                                    <span className="text-xs text-white/70">✓ 视频已选择</span>
                                                 ) : (
-                                                    <span className="text-xs text-white/70">Click to upload video</span>
+                                                    <span className="text-xs text-white/70">点击上传视频</span>
                                                 )}
                                             </div>
                                         </label>
@@ -329,11 +325,11 @@ export const FootageTab = () => {
 
                                     {/* Motion Prompt */}
                                     <div>
-                                        <label className="text-sm text-white/70 block mb-2">Motion Description</label>
+                                        <label className="text-sm text-white/70 block mb-2">运动描述</label>
                                         <textarea
                                             value={motionPrompt}
                                             onChange={(e) => setMotionPrompt(e.target.value)}
-                                            placeholder="Describe the camera movement and motion (e.g., 'slow pan left with subtle zoom in')"
+                                            placeholder='描述镜头运动（例如："缓慢向左平移并略微推进"）'
                                             className="w-full h-16 bg-white/5 border border-white/10 rounded px-3 py-2 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm resize-none"
                                         />
                                     </div>
@@ -344,13 +340,29 @@ export const FootageTab = () => {
 
                     {/* Prompt */}
                     <div className="bg-black/20 rounded-lg p-4 border border-white/10">
-                        <h3 className="text-white font-semibold mb-2">Prompt</h3>
+                        <h3 className="text-white font-semibold mb-2">提示词</h3>
                         <textarea
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
-                            placeholder="Describe the footage you want to generate..."
+                            placeholder="描述您想生成的镜头..."
                             className="w-full h-20 bg-white/5 border border-white/10 rounded px-3 py-2 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500"
                         />
+                    </div>
+
+                    {/* Aspect Ratio */}
+                    <div className="bg-black/20 rounded-lg p-4 border border-white/10">
+                        <h3 className="text-white font-semibold mb-2">宽高比</h3>
+                        <select
+                            value={aspectRatio}
+                            onChange={(e) => setAspectRatio(e.target.value)}
+                            className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        >
+                            <option value="16:9">16:9（横向）</option>
+                            <option value="9:16">9:16（竖向）</option>
+                            <option value="1:1">1:1（方形）</option>
+                            <option value="4:3">4:3（标准）</option>
+                            <option value="21:9">21:9（超宽）</option>
+                        </select>
                     </div>
 
                     {/* Model Parameters - Accordion */}
@@ -359,7 +371,7 @@ export const FootageTab = () => {
                             onClick={() => setExpandModelSettings(!expandModelSettings)}
                             className="w-full flex items-center justify-between p-4 hover:bg-black/30 transition-colors"
                         >
-                            <h3 className="text-white font-semibold">Model Settings</h3>
+                            <h3 className="text-white font-semibold">模型设置</h3>
                             <ChevronDown
                                 className={`h-5 w-5 text-white/70 transition-transform ${expandModelSettings ? "rotate-180" : ""}`}
                             />
@@ -368,7 +380,7 @@ export const FootageTab = () => {
                             <div className="border-t border-white/10 p-4 bg-black/10">
                                 <div className="space-y-3">
                                     <div>
-                                        <label className="text-sm text-white/70">Model</label>
+                                        <label className="text-sm text-white/70">模型</label>
                                         <select
                                             value={model}
                                             onChange={(e) => setModel(e.target.value)}
@@ -380,7 +392,7 @@ export const FootageTab = () => {
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="text-sm text-white/70">Duration (seconds)</label>
+                                        <label className="text-sm text-white/70">时长（秒）</label>
                                         <Input
                                             type="number"
                                             value={duration}
@@ -391,7 +403,7 @@ export const FootageTab = () => {
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-sm text-white/70">Candidates (variations)</label>
+                                        <label className="text-sm text-white/70">候选数量（变体）</label>
                                         <Input
                                             type="number"
                                             value={candidates}
@@ -400,7 +412,7 @@ export const FootageTab = () => {
                                             max="8"
                                             className="mt-1 bg-white/5 border-white/10 text-white"
                                         />
-                                        <p className="text-xs text-white/50 mt-1">Number of variations to generate (1-8)</p>
+                                        <p className="text-xs text-white/50 mt-1">生成变体的数量（1-8）</p>
                                     </div>
                                 </div>
                             </div>
@@ -413,7 +425,7 @@ export const FootageTab = () => {
                     {/* Video Preview */}
                     <div className="bg-black/30 rounded-lg border border-white/10 h-80 overflow-hidden flex flex-col flex-shrink-0">
                         <div className="p-4 border-b border-white/10">
-                            <h3 className="text-white font-semibold">Preview</h3>
+                            <h3 className="text-white font-semibold">预览</h3>
                         </div>
                         <div className="flex-1 flex items-center justify-center bg-black/50 overflow-auto">
                             {isGenerating ? (
@@ -421,7 +433,7 @@ export const FootageTab = () => {
                                     <Skeleton className="w-full h-2/3 rounded-lg" />
                                     <div className="w-full max-w-xs">
                                         <div className="flex justify-between mb-2">
-                                            <span className="text-xs text-white/70">Generating...</span>
+                                            <span className="text-xs text-white/70">生成中...</span>
                                             <span className="text-xs text-white/70">{Math.round(progress)}%</span>
                                         </div>
                                         <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
@@ -445,102 +457,59 @@ export const FootageTab = () => {
                                     onClick={handleGenerate}
                                     className="bg-gradient-to-r from-purple-600 to-emerald-600 text-white hover:from-purple-700 hover:to-emerald-700 font-semibold px-8 py-3"
                                 >
-                                    Generate Footage
+                                    生成镜头
                                 </Button>
                             )}
                         </div>
                     </div>
 
-                    {/* Generated Videos Carousel */}
+                    {/* Generated Videos Selection */}
                     {generatedVideos.length > 0 && (
                         <div className="bg-black/30 rounded-lg border border-white/10 p-6 flex-shrink-0">
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-white font-semibold">Select Best Result</h3>
-                                <Button
-                                    onClick={handleGenerate}
-                                    className="bg-gradient-to-r from-purple-600 to-emerald-600 text-white hover:from-purple-700 hover:to-emerald-700 font-semibold py-2 px-4 text-sm"
-                                >
-                                    Regenerate
-                                </Button>
-                            </div>
-                            <div className="relative">
-                                {/* Side by side candidates */}
-                                <div className="grid grid-cols-2 gap-4">
-                                    {generatedVideos.map((video, idx) => (
-                                        <div
-                                            key={video.id}
-                                            className={`group cursor-pointer transition-all transform hover:scale-105 ${selectedCandidate === video.id ? "scale-105" : ""
-                                                }`}
-                                            onClick={() => handleSelectCandidate(video.id, video.url)}
-                                        >
-                                            <div
-                                                className={`relative rounded-xl overflow-hidden border-3 transition-all ${selectedCandidate === video.id
-                                                    ? "border-green-500 shadow-lg shadow-green-500/50"
-                                                    : "border-white/20 hover:border-white/50"
-                                                    }`}
-                                            >
-                                                {/* Video Thumbnail */}
-                                                <div className="relative w-full h-48 bg-black/50 overflow-hidden">
-                                                    <img
-                                                        src={video.thumbnail}
-                                                        alt={`Candidate ${idx + 1}`}
-                                                        className="w-full h-full object-cover"
-                                                    />
-                                                    {/* Play overlay */}
-                                                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex items-center justify-center">
-                                                        <div className="w-12 h-12 rounded-full bg-white/20 group-hover:bg-white/30 transition-all flex items-center justify-center backdrop-blur-sm">
-                                                            <div className="w-0 h-0 border-l-6 border-l-white border-y-4 border-y-transparent ml-1"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {/* Label & Selection */}
-                                                <div className="bg-gradient-to-t from-black/80 to-transparent p-4 absolute bottom-0 left-0 right-0">
-                                                    <div className="flex items-center justify-between">
-                                                        <span className="text-white font-semibold">Prediction {idx + 1}</span>
-                                                        {selectedCandidate === video.id && (
-                                                            <div className="bg-green-600 rounded-full p-2">
-                                                                <Check className="h-4 w-4 text-white" />
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-
-                                                {/* Delete button */}
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleDelete(video.id);
-                                                    }}
-                                                    className="absolute top-2 right-2 bg-red-600/80 hover:bg-red-600 rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm"
-                                                >
-                                                    <Trash2 className="h-4 w-4 text-white" />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* Navigation hints */}
-                                <div className="mt-4 flex items-center justify-center gap-4">
-                                    {generatedVideos.map((_, idx) => (
-                                        <button
-                                            key={idx}
-                                            onClick={() => handleSelectCandidate(generatedVideos[idx].id, generatedVideos[idx].url)}
-                                            className={`h-2 rounded-full transition-all ${selectedCandidate === generatedVideos[idx].id
-                                                ? "w-8 bg-gradient-to-r from-purple-600 to-emerald-600"
-                                                : "w-2 bg-white/30 hover:bg-white/50"
-                                                }`}
-                                        />
-                                    ))}
+                                <h3 className="text-white font-semibold">选择最佳结果</h3>
+                                <div className="flex gap-2">
+                                    <Button
+                                        onClick={handleCommitPrediction}
+                                        className="bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 font-semibold py-2 px-4 text-sm"
+                                    >
+                                        <Check className="h-4 w-4 mr-2" />
+                                        提交到素材库
+                                    </Button>
+                                    <Button
+                                        onClick={handleGenerate}
+                                        variant="outline"
+                                        className="bg-white/5 hover:bg-white/10 border-white/20 text-white py-2 px-4 text-sm"
+                                    >
+                                        重新生成
+                                    </Button>
                                 </div>
                             </div>
+                            <div className="flex gap-3">
+                                {generatedVideos.map((video, idx) => (
+                                    <Button
+                                        key={video.id}
+                                        onClick={() => handleSelectCandidate(video.id, video.url)}
+                                        variant="outline"
+                                        className={`flex-1 h-12 transition-all ${selectedCandidate === video.id
+                                            ? "bg-green-600 hover:bg-green-700 border-green-500 text-white"
+                                            : "bg-white/5 hover:bg-white/10 border-white/20 text-white/80"
+                                            }`}
+                                    >
+                                        <Check className={`h-4 w-4 mr-2 ${selectedCandidate === video.id ? "opacity-100" : "opacity-0"}`} />
+                                        候选 {idx + 1}
+                                    </Button>
+                                ))}
+                            </div>
+                            <p className="text-xs text-white/50 mt-3">
+                                提示：候选 1 将被添加到您的镜头素材库
+                            </p>
                         </div>
                     )}
 
                     {/* Previously Generated Footage Library */}
                     <div className="bg-black/30 rounded-lg border border-white/10 p-4 flex-shrink-0">
-                        <h3 className="text-white font-semibold mb-3">My Footages</h3>
+                        <h3 className="text-white font-semibold mb-3">我的镜头</h3>
                         {videoHistory.length > 0 ? (
                             <div className="flex gap-2 overflow-x-auto pb-2">
                                 {videoHistory.map((video) => (
@@ -558,9 +527,10 @@ export const FootageTab = () => {
                                                 : "border-white/20 hover:border-white/50"
                                                 }`}
                                         >
-                                            <img
-                                                src={video.thumbnail}
-                                                alt="History"
+                                            <video
+                                                src={video.url}
+                                                muted
+                                                playsInline
                                                 className="w-full h-full object-cover"
                                             />
                                         </div>
@@ -599,7 +569,7 @@ export const FootageTab = () => {
                 <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
                     <div className="bg-black/80 border border-white/20 rounded-lg max-w-2xl w-full max-h-96 overflow-y-auto">
                         <div className="sticky top-0 bg-black/90 border-b border-white/20 p-4 flex items-center justify-between">
-                            <h2 className="text-white font-semibold text-lg">Select Ingredient</h2>
+                            <h2 className="text-white font-semibold text-lg">选择素材</h2>
                             <button
                                 onClick={() => setShowIngredientsDialog(false)}
                                 className="text-white/70 hover:text-white"
@@ -609,26 +579,26 @@ export const FootageTab = () => {
                         </div>
                         <div className="p-6">
                             <div className="grid grid-cols-4 gap-4">
-                                {placeholderIngredients.map((img, idx) => (
+                                {libraryIngredients.map((ingredient) => (
                                     <button
-                                        key={idx}
+                                        key={ingredient.id}
                                         onClick={() => {
-                                            handleAddIngredient(img, "subject");
+                                            handleAddIngredient(ingredient.image, "subject");
                                             setShowIngredientsDialog(false);
                                         }}
                                         className="relative group"
                                     >
                                         <div className="w-full h-32 rounded-lg border-2 border-white/20 hover:border-white/50 transition-colors overflow-hidden bg-gradient-to-br from-white/5 to-white/2">
                                             <img
-                                                src={img}
-                                                alt={`Ingredient ${idx + 1}`}
+                                                src={ingredient.image}
+                                                alt={ingredient.name}
                                                 className="w-full h-full object-cover"
                                             />
                                         </div>
                                         <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100">
                                             <Plus className="h-6 w-6 text-white" />
                                         </div>
-                                        <p className="text-xs text-white/70 mt-2">Select</p>
+                                        <p className="text-xs text-white/70 mt-2">{ingredient.name}</p>
                                     </button>
                                 ))}
                             </div>

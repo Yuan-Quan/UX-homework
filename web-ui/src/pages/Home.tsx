@@ -20,14 +20,14 @@ const Home = () => {
     }
     return (
         <div className="min-h-screen overflow-hidden bg-background flex justify-center">
-            <div className="w-full flex flex-col lg:flex-row">
-                {/* Left column - visible on wider screens */}
-                <div className="lg:w-[600px] lg:h-screen lg:overflow-y-auto lg:flex-shrink-0 no-scrollbar">
-                    <div className="px-4 py-6 lg:py-8">
+            <div className="w-full max-w-[1600px] flex flex-col lg:flex-row gap-8 px-4 lg:px-8">
+                {/* Left column - Project Panel */}
+                <div className="lg:w-[650px] lg:h-screen lg:overflow-hidden lg:flex-shrink-0 lg:py-8">
+                    <div className="px-4 py-6 lg:px-0 lg:py-0">
                         <h1 className="text-4xl font-bold text-white mb-3 text-center lg:text-left">
                             欢迎来到绘想 AIGC 平台
                         </h1>
-                        <p className="text-base text-white/80 max-w-2xl mx-auto lg:mx-0 mb-4 text-center lg:text-left">
+                        <p className="text-base text-white/80 mb-4 text-center lg:text-left">
                             开启您的创意AI之旅。探索、创建并分享令人惊艳的AI生成内容。
                         </p>
                     </div>
@@ -35,7 +35,7 @@ const Home = () => {
                 </div>
 
                 {/* Right column - VideoWall */}
-                <div className="flex-1 min-h-screen mb-24 lg:mb-0">
+                <div className="flex-1 lg:h-screen lg:py-8 mb-24 lg:mb-0 flex items-center justify-center">
                     <VideoWall />
                 </div>
             </div>

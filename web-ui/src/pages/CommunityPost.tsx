@@ -89,7 +89,7 @@ const CommunityPost = () => {
                                 ) : (
                                     <>
                                         <video
-                                            src="/Post1Video.mp4"
+                                            src="/CommunityPosts/Post1Video.mp4"
                                             controls
                                             className="aspect-video w-full object-cover"
                                         />
@@ -277,11 +277,30 @@ const CommunityPost = () => {
                                         <Skeleton className="h-3 w-1/2 bg-white/10" />
                                     </div>
                                 ))
-                                : [1, 2].map((i) => (
-                                    <div key={i} className="group cursor-pointer rounded-2xl border border-white/10 bg-white/5 p-4 hover:bg-white/10 transition">
-                                        <div className="aspect-video w-full rounded-lg bg-gradient-to-br from-purple-500/20 to-emerald-500/20 mb-3" />
+                                : [
+                                    { id: 2, video: '/CommunityPosts/Post2Video.mp4', title: 'Dreamy Landscape Animation' },
+                                    { id: 3, video: '/CommunityPosts/Post3Video.mp4', title: 'Abstract Motion Design' }
+                                ].map((post) => (
+                                    <div
+                                        key={post.id}
+                                        className="group cursor-pointer rounded-2xl border border-white/10 bg-white/5 p-4 hover:bg-white/10 transition"
+                                        onClick={() => navigate(`/community/${post.id}`)}
+                                    >
+                                        <div className="aspect-video w-full rounded-lg overflow-hidden mb-3 bg-black/50">
+                                            <video
+                                                src={post.video}
+                                                className="w-full h-full object-cover"
+                                                muted
+                                                loop
+                                                onMouseEnter={(e) => e.currentTarget.play()}
+                                                onMouseLeave={(e) => {
+                                                    e.currentTarget.pause()
+                                                    e.currentTarget.currentTime = 0
+                                                }}
+                                            />
+                                        </div>
                                         <h3 className="text-sm font-semibold text-white group-hover:text-white/90">
-                                            Related article title {i}
+                                            {post.title}
                                         </h3>
                                         <p className="text-xs text-white/50 mt-1">1 day ago</p>
                                     </div>

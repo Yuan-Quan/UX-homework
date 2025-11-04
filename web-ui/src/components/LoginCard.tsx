@@ -54,12 +54,12 @@ const LoginCard = ({ open, onOpenChange }: LoginCardProps) => {
                     <div className="flex items-center justify-between p-6 border-b border-white/10">
                         <div>
                             <h2 className="text-lg font-semibold text-white">
-                                {isSignUp ? "Create Account" : "Welcome Back"}
+                                {isSignUp ? "创建账户" : "欢迎回来"}
                             </h2>
                             <p className="text-sm text-white/70 mt-1">
                                 {isSignUp
-                                    ? "Sign up to create and share your AI-generated content"
-                                    : "Login to your account to access all features"}
+                                    ? "注册账号，开始创作和分享您的AI生成内容"
+                                    : "登录您的账户，使用所有功能"}
                             </p>
                         </div>
                         <button
@@ -76,7 +76,7 @@ const LoginCard = ({ open, onOpenChange }: LoginCardProps) => {
                             <div className="relative">
                                 <User className="absolute left-3 top-3 h-4 w-4 text-white/50" />
                                 <Input
-                                    placeholder="Full name"
+                                    placeholder="姓名"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-white/40"
@@ -89,7 +89,7 @@ const LoginCard = ({ open, onOpenChange }: LoginCardProps) => {
                             <Mail className="absolute left-3 top-3 h-4 w-4 text-white/50" />
                             <Input
                                 type="email"
-                                placeholder="Email address"
+                                placeholder="电子邮箱"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-white/40"
@@ -101,7 +101,7 @@ const LoginCard = ({ open, onOpenChange }: LoginCardProps) => {
                             <Lock className="absolute left-3 top-3 h-4 w-4 text-white/50" />
                             <Input
                                 type="password"
-                                placeholder="Password"
+                                placeholder="密码"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-white/40"
@@ -113,7 +113,7 @@ const LoginCard = ({ open, onOpenChange }: LoginCardProps) => {
                             type="submit"
                             className="w-full bg-gradient-to-r from-purple-600 to-emerald-600 text-white hover:from-purple-700 hover:to-emerald-700"
                         >
-                            {isSignUp ? "Sign Up" : "Login"}
+                            {isSignUp ? "注册" : "登录"}
                         </Button>
 
                         <div className="relative">
@@ -122,7 +122,7 @@ const LoginCard = ({ open, onOpenChange }: LoginCardProps) => {
                             </div>
                             <div className="relative flex justify-center text-sm">
                                 <span className="px-2 bg-gradient-to-b from-slate-900 to-slate-950 text-white/50">
-                                    Or
+                                    或
                                 </span>
                             </div>
                         </div>
@@ -134,8 +134,8 @@ const LoginCard = ({ open, onOpenChange }: LoginCardProps) => {
                             className="w-full border-white/10 text-white hover:bg-white/5"
                         >
                             {isSignUp
-                                ? "Already have an account? Login"
-                                : "Don't have an account? Sign Up"}
+                                ? "已有账户？立即登录"
+                                : "还没有账户？立即注册"}
                         </Button>
                     </form>
                 </div>

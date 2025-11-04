@@ -3,19 +3,19 @@ import { Skeleton } from "@/components/ui/skeleton";
 export const HomeSkeletonLoader = () => {
     return (
         <div className="min-h-screen overflow-hidden bg-background flex justify-center">
-            <div className="w-full flex flex-col lg:flex-row">
-                {/* Left column skeleton */}
-                <div className="lg:w-[600px] lg:h-screen lg:overflow-y-auto lg:flex-shrink-0 no-scrollbar">
-                    <div className="px-4 py-6 lg:py-8">
-                        <Skeleton className="h-10 w-64 mb-3 mx-auto lg:mx-0" />
-                        <Skeleton className="h-5 w-80 mx-auto lg:mx-0 mb-4" />
+            <div className="w-full max-w-[1600px] flex flex-col lg:flex-row gap-8 px-4 lg:px-8">
+                {/* Left column skeleton - Project Panel */}
+                <div className="lg:w-[650px] lg:h-screen lg:overflow-hidden lg:flex-shrink-0 lg:py-8">
+                    <div className="px-4 py-6 lg:px-0 lg:py-0">
+                        <Skeleton className="h-10 w-80 mb-3 mx-auto lg:mx-0" />
+                        <Skeleton className="h-5 w-96 mb-4 mx-auto lg:mx-0" />
                     </div>
 
                     {/* Projects List Skeleton */}
-                    <div className="flex flex-col px-4 lg:px-6">
+                    <div className="w-full flex flex-col px-4 lg:px-6">
                         <div className="flex-none">
                             <div className="sticky top-0 bg-background/80 backdrop-blur-sm pb-2">
-                                <Skeleton className="h-5 w-24 mb-3 lg:mx-0" />
+                                <Skeleton className="h-5 w-24 mb-3 mx-auto lg:mx-0" />
                                 <Skeleton className="h-8 w-full mb-3" />
                             </div>
                         </div>
@@ -41,11 +41,13 @@ export const HomeSkeletonLoader = () => {
                 </div>
 
                 {/* Right column skeleton - VideoWall */}
-                <div className="flex-1 min-h-screen mb-24 lg:mb-0 p-4">
-                    <div className="space-y-4">
-                        {[...Array(4)].map((_, i) => (
-                            <Skeleton key={i} className="w-full h-32 rounded-lg" />
-                        ))}
+                <div className="flex-1 lg:h-screen lg:py-8 mb-24 lg:mb-0 flex items-center justify-center">
+                    <div className="w-full max-w-[800px] space-y-3">
+                        <div className="grid grid-cols-3 gap-3">
+                            {[...Array(12)].map((_, i) => (
+                                <Skeleton key={i} className="w-full h-[120px] rounded-xl" />
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
