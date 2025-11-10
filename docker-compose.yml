@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  web-ui:
+    build:
+      context: ./web-ui
+      dockerfile: Dockerfile
+    ports:
+      - "8128:80"
+    restart: unless-stopped
+    volumes:
+      - "/srv/dev-disk-by-uuid-87b691d1-4987-425b-8937-5f771a910c66/sites/aigc-platfrom:/usr/share/nginx/html"
+    # Optional: mount nginx config directly if you want to modify without rebuild
+    #   - ./web-ui/nginx.conf:/etc/nginx/conf.d/default.conf:ro
