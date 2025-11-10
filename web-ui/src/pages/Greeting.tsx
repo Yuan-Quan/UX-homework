@@ -1,9 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { Sparkles, Video, Wand2, ArrowRight, Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "@/contexts/UserContext";
+import { useState } from "react";
+import LoginCard from "@/components/LoginCard";
 
 export const Greeting = () => {
     const navigate = useNavigate();
+    const { isLoggedIn } = useUser();
+    const [showLogin, setShowLogin] = useState(false);
+
+    const handleGetStarted = () => {
+        if (isLoggedIn) {
+            navigate('/');
+        } else {
+            setShowLogin(true);
+        }
+    };
 
     return (
         <div className="min-h-screen relative overflow-hidden">
@@ -96,7 +109,7 @@ export const Greeting = () => {
                 {/* CTA Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 items-center">
                     <Button
-                        onClick={() => navigate('/')}
+                        onClick={handleGetStarted}
                         size="lg"
                         className="bg-gradient-to-r from-purple-600 to-emerald-600 hover:from-purple-700 hover:to-emerald-700 text-white px-8 py-6 text-lg font-semibold shadow-2xl hover:shadow-purple-500/50 transition-all hover:scale-105"
                     >
@@ -141,6 +154,9 @@ export const Greeting = () => {
             <div className="absolute top-10 left-1/4 w-4 h-4 bg-purple-500 rounded-full animate-ping"></div>
             <div className="absolute bottom-20 right-1/4 w-3 h-3 bg-emerald-500 rounded-full animate-ping delay-700"></div>
             <div className="absolute top-1/3 right-10 w-2 h-2 bg-blue-500 rounded-full animate-ping delay-300"></div>
+
+            {/* Login Dialog */}
+            <LoginCard open={showLogin} onOpenChange={setShowLogin} />
         </div>
     );
 };

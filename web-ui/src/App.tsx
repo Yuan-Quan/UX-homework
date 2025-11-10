@@ -1,7 +1,7 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import TopBar from './components/TopBar';
 import { ThemeProvider } from "./components/providers/ThemeProvider";
-import { UserProvider } from "./contexts/UserContext";
+import { UserProvider, useUser } from "./contexts/UserContext";
 import Home from "./pages/Home";
 import Community from "./pages/Community";
 import CommunityPost from "./pages/CommunityPost";
@@ -9,6 +9,17 @@ import CreationManagement from "./pages/CreationManagement";
 import UserCenter from "./pages/UserCenter";
 import ProjectWorkbench from "./pages/ProjectWorkbench";
 import Greeting from "./pages/Greeting";
+
+// Protected Route Component
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { isLoggedIn } = useUser();
+
+  if (!isLoggedIn) {
+    return <Navigate to="/greeting" replace />;
+  }
+
+  return <>{children}</>;
+}
 
 
 
@@ -31,11 +42,11 @@ export default function App() {
             {!isWorkbench && !isGreeting && <TopBar />}
             {!isWorkbench && !isGreeting && <div className="p-4">
               <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/community" element={<Community />} />
-                <Route path="/community/:postId" element={<CommunityPost />} />
-                <Route path="/creation-management" element={<CreationManagement />} />
-                <Route path="/usercenter" element={<UserCenter />} />
+                <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+                <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+                <Route path="/community/:postId" element={<ProtectedRoute><CommunityPost /></ProtectedRoute>} />
+                <Route path="/creation-management" element={<ProtectedRoute><CreationManagement /></ProtectedRoute>} />
+                <Route path="/usercenter" element={<ProtectedRoute><UserCenter /></ProtectedRoute>} />
               </Routes>
             </div>}
             {isGreeting && (
@@ -45,8 +56,8 @@ export default function App() {
             )}
             {isWorkbench && (
               <Routes>
-                <Route path="/workbench/:projectName" element={<ProjectWorkbench />} />
-                <Route path="/workbench/:projectName/:tab" element={<ProjectWorkbench />} />
+                <Route path="/workbench/:projectName" element={<ProtectedRoute><ProjectWorkbench /></ProtectedRoute>} />
+                <Route path="/workbench/:projectName/:tab" element={<ProtectedRoute><ProjectWorkbench /></ProtectedRoute>} />
               </Routes>
             )}
           </div>

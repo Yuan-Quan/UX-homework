@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Mail, Lock, User, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -8,10 +9,12 @@ import { useUser } from "@/contexts/UserContext";
 interface LoginCardProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    redirectToHome?: boolean;
 }
 
-const LoginCard = ({ open, onOpenChange }: LoginCardProps) => {
+const LoginCard = ({ open, onOpenChange, redirectToHome = true }: LoginCardProps) => {
     const { login } = useUser();
+    const navigate = useNavigate();
     const [isSignUp, setIsSignUp] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -35,6 +38,11 @@ const LoginCard = ({ open, onOpenChange }: LoginCardProps) => {
         setPassword("");
         setName("");
         setIsSignUp(false);
+
+        // Redirect to home page after login
+        if (redirectToHome) {
+            navigate('/');
+        }
     };
 
     if (!open) return null;
