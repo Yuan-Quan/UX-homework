@@ -104,14 +104,14 @@ export const FootageTab = () => {
         setSelectedCandidate(null);
     };
 
-    const handleDelete = (id: string) => {
-        const filtered = generatedVideos.filter((v) => v.id !== id);
-        setGeneratedVideos(filtered);
-        if (currentPreview === generatedVideos.find((v) => v.id === id)?.url) {
-            setCurrentPreview(filtered[0]?.url || null);
-            setSelectedCandidate(filtered[0]?.id || null);
-        }
-    };
+    //    const handleDelete = (id: string) => {
+    //        const filtered = generatedVideos.filter((v) => v.id !== id);
+    //        setGeneratedVideos(filtered);
+    //        if (currentPreview === generatedVideos.find((v) => v.id === id)?.url) {
+    //            setCurrentPreview(filtered[0]?.url || null);
+    //            setSelectedCandidate(filtered[0]?.id || null);
+    //        }
+    //    };
 
     const handleAddIngredient = (image: string, type: IngredientType = "subject") => {
         const newIngredient: FootageIngredient = {
